@@ -1605,7 +1605,7 @@ struct RGB2Lab_b
         }
     }
 
-#if CV_NEON
+#if CV_NEON && !CV_SIMD_SCALABLE
     template <int n>
     inline void rgb2lab_batch(const ushort* tab,
                               const v_uint8 vRi, const v_uint8 vGi, const v_uint8 vBi,
@@ -1666,7 +1666,7 @@ struct RGB2Lab_b
         vb = v_fma(v_sub(vfY, vfZ), v_setall_s32(200), v_setall_s32(abShift+labDescaleShift));
         vb = v_shr<lab_shift2>(vb);
     }
-#endif // CV_NEON
+#endif // CV_NEON && !CV_SIMD_SCALABLE
 
     void operator()(const uchar* src, uchar* dst, int n) const
     {
@@ -1682,7 +1682,7 @@ struct RGB2Lab_b
 
         i = 0;
 
-#if CV_NEON
+#if CV_NEON && !CV_SIMD_SCALABLE
         // On each loop, we load nlanes of RGB/A v_uint8s and store nlanes of
         // Lab v_uint8s
         for(; i <= n - VTraits<v_uint8>::vlanes(); i += VTraits<v_uint8>::vlanes(),
@@ -1719,7 +1719,7 @@ struct RGB2Lab_b
                 v_pack(v_pack_u(va0, va1), v_pack_u(va2, va3)),
                 v_pack(v_pack_u(vb0, vb1), v_pack_u(vb2, vb3)));
         }
-#endif // CV_NEON
+#endif // CV_NEON && !CV_SIMD_SCALABLE
 
 #if CV_SIMD
         const int vsize = VTraits<v_uint8>::vlanes();

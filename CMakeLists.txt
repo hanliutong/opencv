@@ -233,6 +233,9 @@ OCV_OPTION(WITH_NDSRVP "Use Andes RVP extension" (NOT CV_DISABLE_OPTIMIZATION)
   VISIBLE_IF RISCV)
 OCV_OPTION(WITH_HAL_RVV "Use HAL RVV optimizations" (NOT CV_DISABLE_OPTIMIZATION)
   VISIBLE_IF RISCV)
+OCV_OPTION(WITH_HIGHWAY "Use Google Highway SIMD library for Universal Intrinsic" OFF
+  VISIBLE_IF TRUE
+  VERIFY HAVE_HIGHWAY)
 OCV_OPTION(WITH_FASTCV "Use Qualcomm FastCV acceleration library for ARM platform" OFF
   VISIBLE_IF ((ARM OR AARCH64) AND (ANDROID OR (UNIX AND NOT APPLE AND NOT IOS AND NOT XROS))))
 OCV_OPTION(WITH_CPUFEATURES "Use cpufeatures Android library" ON
@@ -887,6 +890,11 @@ endif()
 # --- Halide ---
 if(WITH_HALIDE)
   include(cmake/OpenCVDetectHalide.cmake)
+endif()
+
+# --- Highway ---
+if(WITH_HIGHWAY)
+  include(cmake/OpenCVDetectHighway.cmake)
 endif()
 
 # --- VkCom ---

@@ -219,12 +219,17 @@ using namespace CV_CPU_OPTIMIZATION_HAL_NAMESPACE;
 #   undef CV_RVV
 #endif
 
-#if (CV_SSE2 || CV_NEON || CV_VSX || CV_MSA || CV_WASM_SIMD || CV_RVV071 || CV_LSX) && !defined(CV_FORCE_SIMD128_CPP)
+// Note: intrin_forward.hpp declares 128-bit fixed-size types (v_uint16x8 etc.)
+// which conflict with Highway's scalable types. Skip it when Highway is active.
+#if (CV_SSE2 || CV_NEON || CV_VSX || CV_MSA || CV_WASM_SIMD || CV_RVV071 || CV_LSX) && !defined(CV_FORCE_SIMD128_CPP) && !(defined(CV_HWY) && CV_HWY)
 #define CV__SIMD_FORWARD 128
 #include "opencv2/core/hal/intrin_forward.hpp"
 #endif
 
-#if CV_SSE2 && !defined(CV_FORCE_SIMD128_CPP)
+#if defined(CV_HWY) && CV_HWY && !defined(CV_FORCE_SIMD128_CPP)
+#include "opencv2/core/hal/intrin_highway.hpp"
+
+#elif CV_SSE2 && !defined(CV_FORCE_SIMD128_CPP)
 
 #include "opencv2/core/hal/intrin_sse_em.hpp"
 #include "opencv2/core/hal/intrin_sse.hpp"

@@ -1,0 +1,20 @@
+set(CMAKE_SYSTEM_NAME Linux)
+set(CMAKE_SYSTEM_PROCESSOR riscv64)
+
+set(RISCV_GCC_INSTALL_ROOT "/opt/riscv" CACHE PATH "RISC-V toolchain root")
+
+set(CMAKE_C_COMPILER "${RISCV_GCC_INSTALL_ROOT}/bin/riscv64-unknown-linux-gnu-gcc")
+set(CMAKE_CXX_COMPILER "${RISCV_GCC_INSTALL_ROOT}/bin/riscv64-unknown-linux-gnu-g++")
+
+set(CMAKE_C_FLAGS_INIT "-march=rv64gcv -mabi=lp64d")
+set(CMAKE_CXX_FLAGS_INIT "-march=rv64gcv -mabi=lp64d")
+
+set(CMAKE_FIND_ROOT_PATH "${RISCV_GCC_INSTALL_ROOT}/sysroot")
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+
+# OpenCV specific
+set(WITH_HIGHWAY ON CACHE BOOL "Use Highway")
+set(CPU_BASELINE "" CACHE STRING "")
+set(CPU_DISPATCH "" CACHE STRING "")
